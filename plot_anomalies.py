@@ -80,6 +80,8 @@ if __name__ == '__main__': # dask seems to need this
     n_trees = int(sys.argv[5])
     desired_TPR = int(sys.argv[6])
     desired_TPR /= 100.0
+    col_start = int(sys.argv[7]) if sys.argv[7] is not None else 0
+    col_end = int(sys.argv[8]) if sys.argv[8] is not None else -1
 
     df = pd.read_csv(datafile)
 
@@ -87,6 +89,14 @@ if __name__ == '__main__': # dask seems to need this
         N = len(df)
     else:
         N = int(sys.argv[3])
+
+    original_df = df.copy()
+
+    df = df.iloc[:, col_start:col_end]
+
+    df = pd.concat([df, original_df[targetcol]], axis=1)
+
+    print("Considered columns: ", [col for col in df.columns])
 
     df = df.sample(N)  # grab random subset (too slow otherwise)
     X, y = df.drop(targetcol, axis=1), df[targetcol]
