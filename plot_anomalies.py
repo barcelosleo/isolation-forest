@@ -41,11 +41,15 @@ def plot_anomalies(X, y, sample_size=256, n_trees = 100, desired_TPR=None, perce
     TN, FP, FN, TP = confusion.flat
     TPR = TP / (TP + FN)
     FPR = FP / (FP + TN)
+    precision = TP / (TP + FP)
+    recall = TP / (TP + FN)
     normal = scores[y==0]
     anomalies = scores[y==1]
     F1 = f1_score(y, y_pred)
     PR = average_precision_score(y, scores)
     print(f"Proportion anomalies/normal = {len(anomalies)}/{len(normal)} = {(len(anomalies)/len(normal))*100:.1f}%")
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
     print(f"F1 score {F1:.4f}, avg PR {PR:.4f}")
 
     fig, axes = plt.subplots(2, 1, sharex=True)
