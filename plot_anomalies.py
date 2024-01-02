@@ -12,7 +12,7 @@ def add_noise(df, n_noise):
         df[f'noise_{i}'] = np.random.normal(-2,2,len(df))
 
 
-def plot_anomalies(X, y, sample_size=256, n_trees = 100, desired_TPR=None, percentile = None, normal_ymax=None, bins=20):
+def plot_anomalies(X, y, file_name, sample_size=256, n_trees = 100, desired_TPR=None, percentile = None, normal_ymax=None, bins=20):
     N = len(X)
 
     it = IsolationTreeEnsemble(sample_size=sample_size, n_trees=n_trees)
@@ -50,6 +50,7 @@ def plot_anomalies(X, y, sample_size=256, n_trees = 100, desired_TPR=None, perce
     print(f"Proportion anomalies/normal = {len(anomalies)}/{len(normal)} = {(len(anomalies)/len(normal))*100:.1f}%")
     print(f"Precision: {precision}")
     print(f"Recall: {recall}")
+    print(f"F1 score: {F1}")
     print(f"F1 score {F1:.4f}, avg PR {PR:.4f}")
 
     fig, axes = plt.subplots(2, 1, sharex=True)
@@ -69,7 +70,7 @@ def plot_anomalies(X, y, sample_size=256, n_trees = 100, desired_TPR=None, perce
     if normal_ymax is not None:
         axes[0].set_ylim(0, normal_ymax)
     plt.tight_layout()
-    plt.savefig(f"{datafile.split('.')[0]}-{n_trees}-{int(desired_TPR*100)}.svg",
+    plt.savefig(f"{file_name}-{n_trees}-{int(desired_TPR*100)}.svg",
                 bbox_inches='tight',
                 pad_inches=0)
     plt.show()
