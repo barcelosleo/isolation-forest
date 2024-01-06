@@ -208,7 +208,7 @@ def find_TPR_threshold(y, scores, desired_TPR):
                 FN += 1
 
         # Break the while loop if there are no TP + FN or FP + TN
-        if (TP + FN) or (FP + TN) == 0:
+        if (TP + FN) == 0 or (FP + TN) == 0:
             break
 
         TPR = TP / (TP + FN)
