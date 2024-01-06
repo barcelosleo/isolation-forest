@@ -206,9 +206,14 @@ def find_TPR_threshold(y, scores, desired_TPR):
                 FP += 1
             if p == 0 and label == 1:
                 FN += 1
+
+        # Break the while loop if there are no TP + FN or FP + TN
+        if (TP + FN) or (FP + TN) == 0:
+            break
+
         TPR = TP / (TP + FN)
         FPR = FP / (FP + TN)
-        
+
         if threshold < 0:
             print("The model cannot reach the desired TPR")
             return
