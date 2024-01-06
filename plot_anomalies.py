@@ -39,10 +39,23 @@ def plot_anomalies(X, y, file_name, sample_size=256, n_trees = 100, desired_TPR=
     print(confusion)
 
     TN, FP, FN, TP = confusion.flat
-    TPR = TP / (TP + FN)
-    FPR = FP / (FP + TN)
-    precision = TP / (TP + FP)
-    recall = TP / (TP + FN)
+    if (TP + FN) == 0:
+        TPR = 0
+        recall = 0
+    else:
+        TPR = TP / (TP + FN)
+        recall = TP / (TP + FN)
+
+    if (FP + TN) == 0:
+        FPR = 0
+    else:
+        FPR = FP / (FP + TN)
+
+    if (TP + FP) == 0:
+        precision = 0
+    else:
+        precision = TP / (TP + FP)
+
     normal = scores[y==0]
     anomalies = scores[y==1]
     F1 = f1_score(y, y_pred)
