@@ -39,22 +39,10 @@ def plot_anomalies(X, y, file_name, sample_size=256, n_trees = 100, desired_TPR=
     print(confusion)
 
     TN, FP, FN, TP = confusion.flat
-    if (TP + FN) == 0:
-        TPR = 0
-        recall = 0
-    else:
-        TPR = TP / (TP + FN)
-        recall = TP / (TP + FN)
-
-    if (FP + TN) == 0:
-        FPR = 0
-    else:
-        FPR = FP / (FP + TN)
-
-    if (TP + FP) == 0:
-        precision = 0
-    else:
-        precision = TP / (TP + FP)
+    TPR = TP / (TP + FN)
+    FPR = FP / (FP + TN)
+    recall = TP / (TP + FN)
+    precision = TP / (TP + FP)
 
     normal = scores[y==0]
     anomalies = scores[y==1]
@@ -75,9 +63,9 @@ def plot_anomalies(X, y, file_name, sample_size=256, n_trees = 100, desired_TPR=
     axes[0].plot([threshold,threshold],[0,max(counts0)], '--', color='grey')
     axes[1].plot([threshold,threshold],[0,max(counts1)], '--', color='grey')
     text_xr = 0.97 * axes[0].get_xlim()[1]
-    axes[0].text(text_xr, .85 * max(counts0), f"N {N}, {n_trees} trees", horizontalalignment='right')
-    axes[0].text(text_xr, .75 * max(counts0), f"F1 score {F1:.4f}, avg PR {PR:.4f}", horizontalalignment='right')
-    axes[0].text(text_xr, .65 * max(counts0), f"TPR {TPR:.4f}, FPR {FPR:.4f}", horizontalalignment='right')
+    # axes[0].text(text_xr, .85 * max(counts0), f"N {N}, {n_trees} trees", horizontalalignment='right')
+    axes[0].text(text_xr, .75 * max(counts0), f"F1 score {F1:.4f}, Precision {precision:.4f}, Recall {recall:.4f}", horizontalalignment='right')
+    # axes[0].text(text_xr, .65 * max(counts0), f"TPR {TPR:.4f}, FPR {FPR:.4f}", horizontalalignment='right')
     axes[0].text(threshold+.005, .20 * max(counts0), f"score threshold {threshold:.3f}")
     axes[0].text(threshold+.005, .10 * max(counts0), f"True anomaly rate {len(anomalies) / len(normal):.4f}")
     if normal_ymax is not None:
