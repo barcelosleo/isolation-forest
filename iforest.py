@@ -190,6 +190,8 @@ def find_TPR_threshold(y, scores, desired_TPR):
     TPR = 0
     FPR = 0
     threshold = 1
+    max_iterations = 1e6
+    i = 0
     while TPR < desired_TPR:
         threshold -= 0.01
         prediction = [1 if s > threshold else 0 for s in scores]
@@ -208,14 +210,23 @@ def find_TPR_threshold(y, scores, desired_TPR):
                 FN += 1
 
         # Break the while loop if there are no TP + FN or FP + TN
-        if (TP + FN) == 0 or (FP + TN) == 0:
-            break
+        if (TP + FN) > 0:
+            TPR = TP / (TP + FN)
+        else:
+            TPR = 0
 
-        TPR = TP / (TP + FN)
-        FPR = FP / (FP + TN)
+        if (FP + TN) > 0:
+            FPR = FP / (FP + TN)
+        else:
+            FPR = 0
 
         if threshold < 0:
             print("The model cannot reach the desired TPR")
             return
+
+        i += 1
+
+        if i >= max_iterations:
+            break
 
     return threshold, FPR
